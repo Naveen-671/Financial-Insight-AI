@@ -1,0 +1,693 @@
+[
+  {
+    "text": "Acme Corp shall pay John Doe USD 5,000,000 within 30 days of invoice dated 15th March 2025. Interest at 6% per annum will be charged on overdue amounts.",
+    "entities": [
+      { "start": 0, "end": 9, "label": "ORG" },
+      { "start": 21, "end": 29, "label": "PERSON" },
+      { "start": 30, "end": 41, "label": "MONEY" },
+      { "start": 56, "end": 67, "label": "PAYMENT_TERM" },
+      { "start": 84, "end": 100, "label": "DATE" },
+      { "start": 105, "end": 107, "label": "INTEREST_RATE" }
+    ]
+  },
+  {
+    "text": "XYZ Bank shall charge Jane Smith 2% penalty on late payments exceeding 60 days. All invoices must be cleared within 45 days from receipt in New York, USA.",
+    "entities": [
+      { "start": 0, "end": 8, "label": "ORG" },
+      { "start": 21, "end": 31, "label": "PERSON" },
+      { "start": 32, "end": 35, "label": "PENALTY" },
+      { "start": 80, "end": 82, "label": "PAYMENT_TERM" },
+      { "start": 110, "end": 118, "label": "GPE" },
+      { "start": 120, "end": 123, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "The borrower, Michael Johnson, may prepay the loan of USD 2,500,000 in whole or in part without penalty, provided 30 days’ prior notice is given.",
+    "entities": [
+      { "start": 14, "end": 29, "label": "PERSON" },
+      { "start": 58, "end": 69, "label": "MONEY" },
+      { "start": 113, "end": 115, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "Payments of EUR 1,200,000 are due to Global Tech Ltd within 60 days of invoice date 1st April 2025.",
+    "entities": [
+      { "start": 12, "end": 23, "label": "MONEY" },
+      { "start": 33, "end": 47, "label": "ORG" },
+      { "start": 58, "end": 60, "label": "PAYMENT_TERM" },
+      { "start": 84, "end": 97, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Confidential information shared between ABC Ltd and John Doe shall not be disclosed to any third party for a period of 5 years.",
+    "entities": [
+      { "start": 36, "end": 43, "label": "ORG" },
+      { "start": 48, "end": 56, "label": "PERSON" },
+      { "start": 102, "end": 103, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "Collateral for the loan includes real estate valued at USD 3,500,000 located in London, UK.",
+    "entities": [
+      { "start": 0, "end": 8, "label": "COLLATERAL" },
+      { "start": 35, "end": 46, "label": "MONEY" },
+      { "start": 57, "end": 63, "label": "GPE" },
+      { "start": 65, "end": 67, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "Force majeure events such as earthquakes, floods, and pandemics shall excuse liability of the parties.",
+    "entities": [
+      { "start": 0, "end": 13, "label": "FORCE_MAJEURE" },
+      { "start": 34, "end": 45, "label": "EVENT" },
+      { "start": 47, "end": 53, "label": "EVENT" },
+      { "start": 59, "end": 68, "label": "EVENT" }
+    ]
+  },
+  {
+    "text": "The agreement will automatically renew for 12 months unless either party provides written notice of termination.",
+    "entities": [
+      { "start": 24, "end": 42, "label": "AUTOMATIC_RENEWAL" },
+      { "start": 47, "end": 49, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "Taxes of 1.5% shall be applied on all payments made to clients based in Germany.",
+    "entities": [
+      { "start": 0, "end": 5, "label": "TAXES" },
+      { "start": 24, "end": 27, "label": "PERCENT" },
+      { "start": 54, "end": 61, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "Any disputes arising will be resolved through arbitration in Singapore as per governing law.",
+    "entities": [
+      { "start": 33, "end": 44, "label": "DISPUTE_RESOLUTION" },
+      { "start": 48, "end": 57, "label": "GPE" },
+      { "start": 65, "end": 79, "label": "GOVERNING_LAW" }
+    ]
+  },
+  {
+    "text": "Beta Financial Inc will lend Mary Jane EUR 750,000 at a fixed interest rate of 4% per annum. The loan must be repaid within five years.",
+    "entities": [
+      { "start": 0, "end": 17, "label": "ORG" },
+      { "start": 27, "end": 36, "label": "PERSON" },
+      { "start": 37, "end": 48, "label": "MONEY" },
+      { "start": 83, "end": 84, "label": "INTEREST_RATE" },
+      { "start": 119, "end": 129, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "Triple A Services agrees that a service fee of USD 120,000 will be paid upfront by the Client before the contract commencement date of 1st January 2025.",
+    "entities": [
+      { "start": 0, "end": 17, "label": "ORG" },
+      { "start": 45, "end": 58, "label": "MONEY" },
+      { "start": 98, "end": 112, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Client company Delta LLC shall reimburse all travel and lodging costs within 20 days of expense submission.",
+    "entities": [
+      { "start": 15, "end": 24, "label": "ORG" },
+      { "start": 50, "end": 54, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "Loan agreement between Omega Bank and Robert Brown states that interest shall be computed monthly at 1.8%.",
+    "entities": [
+      { "start": 21, "end": 30, "label": "ORG" },
+      { "start": 35, "end": 47, "label": "PERSON" },
+      { "start": 91, "end": 94, "label": "INTEREST_RATE" }
+    ]
+  },
+  {
+    "text": "If the borrower misses three consecutive payments, a default interest of 5% per month will be charged and a penalty of USD 50,000 applied.",
+    "entities": [
+      { "start": 45, "end": 48, "label": "PENALTY" },
+      { "start": 70, "end": 72, "label": "INTEREST_RATE" },
+      { "start": 112, "end": 123, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "The board member, Alice Green, shall receive commission of 0.75% for every transaction above EUR 200,000 made by the client.",
+    "entities": [
+      { "start": 18, "end": 29, "label": "PERSON" },
+      { "start": 55, "end": 59, "label": "PERCENT" },
+      { "start": 86, "end": 96, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "This contract shall be governed by the laws of Canada and disputes must be resolved in Toronto.",
+    "entities": [
+      { "start": 42, "end": 48, "label": "GPE" },
+      { "start": 85, "end": 92, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "The lender, Star Financial, may call for early repayment if the borrower’s credit rating falls below BBB on or after 1st July 2026.",
+    "entities": [
+      { "start": 12, "end": 27, "label": "ORG" },
+      { "start": 102, "end": 113, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "If either party gives a 45‑day notice, the contract terminates. Notice must be delivered in writing to New York, USA.",
+    "entities": [
+      { "start": 21, "end": 23, "label": "DURATION" },
+      { "start": 97, "end": 105, "label": "GPE" },
+      { "start": 107, "end": 110, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "Loan amount of INR 10,000,000 will be disbursed to Priya Singh upon execution of the agreement. Priya is expected to start repayment from 1st October 2025.",
+    "entities": [
+      { "start": 15, "end": 27, "label": "MONEY" },
+      { "start": 32, "end": 43, "label": "PERSON" },
+      { "start": 102, "end": 114, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Any event of force majeure like war, strike or pandemic will suspend obligations until 31st December 2027.",
+    "entities": [
+      { "start": 17, "end": 30, "label": "FORCE_MAJEURE" },
+      { "start": 82, "end": 100, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Seller Corporation shall pay a royalty fee of EUR 15,000 to John Carter on a quarterly basis.",
+    "entities": [
+      { "start": 0, "end": 18, "label": "ORG" },
+      { "start": 38, "end": 48, "label": "MONEY" },
+      { "start": 52, "end": 62, "label": "PERSON" }
+    ]
+  },
+  {
+    "text": "The borrower, Nina Patel, may use a property valued at USD 1,200,000 in Mumbai, India, as collateral for this loan.",
+    "entities": [
+      { "start": 14, "end": 24, "label": "PERSON" },
+      { "start": 49, "end": 61, "label": "MONEY" },
+      { "start": 65, "end": 71, "label": "GPE" },
+      { "start": 73, "end": 78, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "In the event of default, the interest rate increases to 8% per annum plus a late fee of 1% on aggregate outstanding principal.",
+    "entities": [
+      { "start": 36, "end": 39, "label": "INTEREST_RATE" },
+      { "start": 70, "end": 71, "label": "PERCENT" }
+    ]
+  },
+  {
+    "text": "Fees amounting to USD 200,000 shall be payable by the client within 10 days of receiving an invoice.",
+    "entities": [
+      { "start": 19, "end": 30, "label": "MONEY" },
+      { "start": 66, "end": 68, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "This agreement will automatically renew unless terminated by either party in writing 60 days prior to expiry.",
+    "entities": [
+      { "start": 24, "end": 42, "label": "AUTOMATIC_RENEWAL" },
+      { "start": 102, "end": 104, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "Should mediation fail, the parties agree to submit disputes to arbitration in London as per the laws of England.",
+    "entities": [
+      { "start": 47, "end": 60, "label": "DISPUTE_RESOLUTION" },
+      { "start": 64, "end": 70, "label": "GPE" },
+      { "start": 89, "end": 96, "label": "GOVERNING_LAW" }
+    ]
+  },
+  {
+    "text": "The client, David Miller, shall maintain a minimum liquidity ratio of 1.4 at all times during the loan tenure.",
+    "entities": [
+      { "start": 12, "end": 24, "label": "PERSON" },
+      { "start": 57, "end": 60, "label": "FINANCIAL_COVENANT" },
+      { "start": 61, "end": 64, "label": "RATIO" }
+    ]
+  },
+  {
+    "text": "Borrower agrees that upon prepayment they must pay a fee of GBP 100,000 and provide 30 days’ advance written notice.",
+    "entities": [
+      { "start": 56, "end": 70, "label": "MONEY" },
+      { "start": 91, "end": 93, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "Global Holdings Ltd will disburse the loan in two tranches: first GBP 50,000, then GBP 150,000 within 90 days after signing.",
+    "entities": [
+      { "start": 0, "end": 19, "label": "ORG" },
+      { "start": 63, "end": 71, "label": "MONEY" },
+      { "start": 79, "end": 89, "label": "MONEY" },
+      { "start": 100, "end": 102, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "A late payment charge of 0.8% per month will be applied if the client does not pay within the stipulated 60 days.",
+    "entities": [
+      { "start": 24, "end": 26, "label": "PERCENT" },
+      { "start": 82, "end": 84, "label": "PAYMENT_TERM" }
+    ]
+  },
+  {
+    "text": "In case of bankruptcy or insolvency, either party may terminate this agreement with immediate effect.",
+    "entities": [
+      { "start": 19, "end": 30, "label": "LEGAL_EVENT" },
+      { "start": 60, "end": 70, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "The company, Horizon Finance, shall hold the borrower, Sarah Lee, liable to pay a processing fee of USD 75,000.",
+    "entities": [
+      { "start": 14, "end": 30, "label": "ORG" },
+      { "start": 48, "end": 57, "label": "PERSON" },
+      { "start": 102, "end": 114, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If Profits fall below 10% for two consecutive quarters, the lender may review and adjust the loan covenants.",
+    "entities": [
+      { "start": 13, "end": 20, "label": "PERCENT" },
+      { "start": 69, "end": 76, "label": "FINANCIAL_COVENANT" }
+    ]
+  },
+  {
+    "text": "Any change in control of the borrower entity requires written approval from the lender before any further disbursement.",
+    "entities": [
+      { "start": 19, "end": 27, "label": "ORG" },
+      { "start": 68, "end": 75, "label": "ORG" }
+    ]
+  },
+  {
+    "text": "The dividend payment of EUR 45,000 to shareholders shall happen within 14 days after record date 31st December 2025.",
+    "entities": [
+      { "start": 21, "end": 31, "label": "MONEY" },
+      { "start": 89, "end": 107, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Customer, Emily Davis, must maintain collateral equal to 70% of the loan value, failure to do so will trigger default conditions.",
+    "entities": [
+      { "start": 10, "end": 21, "label": "PERSON" },
+      { "start": 52, "end": 55, "label": "PERCENT" },
+      { "start": 95, "end": 103, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "The investor, Global Equity Partners, may require audited financial statements annually for review.",
+    "entities": [
+      { "start": 13, "end": 35, "label": "ORG" },
+      { "start": 69, "end": 76, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "If the debt to equity ratio exceeds 2.0, the lender has the right to demand immediate repayment.",
+    "entities": [
+      { "start": 7, "end": 24, "label": "FINANCIAL_COVENANT" },
+      { "start": 41, "end": 49, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "A subordinated fee of USD 250,000 will be paid to the underwriting bank upon final closing of the transaction.",
+    "entities": [
+      { "start": 22, "end": 33, "label": "MONEY" },
+      { "start": 59, "end": 82, "label": "ORG" }
+    ]
+  },
+  {
+    "text": "The Guarantor, Peter Wong, shall guarantee up to USD 1,000,000 of the loan principal.",
+    "entities": [
+      { "start": 14, "end": 24, "label": "PERSON" },
+      { "start": 48, "end": 61, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If an event of default occurs, the interest rate will reset to 9% per annum and a penalty of 1% will apply.",
+    "entities": [
+      { "start": 51, "end": 52, "label": "INTEREST_RATE" },
+      { "start": 86, "end": 87, "label": "PERCENT" }
+    ]
+  },
+  {
+    "text": "Payments to consultants amounting to GBP 200,000 must be made within 30 days of invoice date 20th February 2025.",
+    "entities": [
+      { "start": 29, "end": 40, "label": "MONEY" },
+      { "start": 84, "end": 102, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "The lender agrees to disburse USD 500,000 into the borrower’s account on 1st May 2025, subject to board approval.",
+    "entities": [
+      { "start": 23, "end": 34, "label": "MONEY" },
+      { "start": 66, "end": 78, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "Upon breach, the borrower, Maria Rodriguez, will pay default interest of 7% per annum until cure or termination.",
+    "entities": [
+      { "start": 30, "end": 45, "label": "PERSON" },
+      { "start": 75, "end": 76, "label": "INTEREST_RATE" }
+    ]
+  },
+  {
+    "text": "The service provider, Delta Services Inc., shall invoice the client monthly and charge a recurring fee of EUR 5,000.",
+    "entities": [
+      { "start": 21, "end": 39, "label": "ORG" },
+      { "start": 87, "end": 98, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If a party wishes to assign the agreement, they must obtain prior written consent 60 days before the effective date of 1st September 2025.",
+    "entities": [
+      { "start": 117, "end": 138, "label": "DATE" },
+      { "start": 90, "end": 92, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "All payments in default shall accrue interest on a daily basis at the rate of 0.03% until paid in full.",
+    "entities": [{ "start": 93, "end": 97, "label": "INTEREST_RATE" }]
+  },
+  {
+    "text": "The client, Oliver Twist, must maintain a debt service coverage ratio (DSCR) of at least 1.25 through the life of the loan.",
+    "entities": [
+      { "start": 12, "end": 24, "label": "PERSON" },
+      { "start": 72, "end": 76, "label": "FINANCIAL_COVENANT" },
+      { "start": 93, "end": 98, "label": "RATIO" }
+    ]
+  },
+  {
+    "text": "A guarantee fee of USD 10,000 is payable annually by the guarantor, Lisa Wong, for the term of the guarantee.",
+    "entities": [
+      { "start": 20, "end": 31, "label": "MONEY" },
+      { "start": 73, "end": 83, "label": "PERSON" }
+    ]
+  },
+  {
+    "text": "Either Party may terminate this agreement for convenience by giving 90 days’ prior written notice.",
+    "entities": [{ "start": 70, "end": 72, "label": "DURATION" }]
+  },
+  {
+    "text": "In case of insolvency, the lender may take over the borrower’s business and call a meeting of creditors within 30 days.",
+    "entities": [
+      { "start": 11, "end": 21, "label": "LEGAL_EVENT" },
+      { "start": 116, "end": 118, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "The underwriter, Global Securities Corp, will receive underwriting compensation of GBP 1,500,000 at closing.",
+    "entities": [
+      { "start": 18, "end": 39, "label": "ORG" },
+      { "start": 80, "end": 92, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If the borrower fails to maintain the agreed working capital balance, the lender may impose a penalty fee of 2% per month.",
+    "entities": [{ "start": 109, "end": 110, "label": "PERCENT" }]
+  },
+  {
+    "text": "The agreement shall be governed by the laws of Switzerland and all disputes shall be resolved by mediation in Zurich.",
+    "entities": [
+      { "start": 43, "end": 54, "label": "GPE" },
+      { "start": 96, "end": 101, "label": "GPE" },
+      { "start": 58, "end": 75, "label": "GOVERNING_LAW" },
+      { "start": 81, "end": 91, "label": "DISPUTE_RESOLUTION" }
+    ]
+  },
+  {
+    "text": "The Client, Robert King, must pay all outstanding invoices by 15th August 2025, failing which interest will accrue.",
+    "entities": [
+      { "start": 12, "end": 23, "label": "PERSON" },
+      { "start": 57, "end": 72, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "A prepayment penalty shall apply if the borrower repays more than USD 300,000 in any 12-month period without prior consent.",
+    "entities": [
+      { "start": 91, "end": 102, "label": "MONEY" },
+      { "start": 106, "end": 109, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "Fees for administrative services will be charged at GBP 20,000 per annum by Alpha Admin Ltd.",
+    "entities": [
+      { "start": 49, "end": 60, "label": "MONEY" },
+      { "start": 79, "end": 95, "label": "ORG" }
+    ]
+  },
+  {
+    "text": "The borrower, Carlos Santana, shall execute a lien on his residential property in Madrid, Spain, valued at EUR 750,000.",
+    "entities": [
+      { "start": 14, "end": 29, "label": "PERSON" },
+      { "start": 85, "end": 90, "label": "GPE" },
+      { "start": 92, "end": 97, "label": "GPE" },
+      { "start": 114, "end": 126, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "Interest rate will be revised to 5.5% per annum every 5 years based on the London Interbank Offered Rate (LIBOR).",
+    "entities": [
+      { "start": 28, "end": 31, "label": "INTEREST_RATE" },
+      { "start": 63, "end": 68, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "If government regulations change, either party may renegotiate the terms or terminate this agreement with 120 days’ notice.",
+    "entities": [{ "start": 112, "end": 115, "label": "DURATION" }]
+  },
+  {
+    "text": "A bonus of USD 500,000 will be paid to the management team if earnings before interest and tax (EBIT) exceed EUR 2,000,000.",
+    "entities": [
+      { "start": 11, "end": 22, "label": "MONEY" },
+      { "start": 91, "end": 102, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "This agreement includes a confidentiality obligation: the parties must not disclose proprietary data to any third party for 10 years.",
+    "entities": [
+      { "start": 27, "end": 42, "label": "CONFIDENTIALITY" },
+      { "start": 114, "end": 116, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "The loan shall be repaid in monthly instalments of USD 25,000 starting on 1st February 2026.",
+    "entities": [
+      { "start": 52, "end": 63, "label": "MONEY" },
+      { "start": 85, "end": 97, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "In the event of material breach, the lender may demand immediate repayment of the full outstanding principal.",
+    "entities": [
+      { "start": 21, "end": 36, "label": "LEGAL_EVENT" },
+      { "start": 48, "end": 74, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "Upon signing the contract, the borrower, Linda Wright, shall pay an upfront fee of EUR 100,000 within 5 days.",
+    "entities": [
+      { "start": 33, "end": 45, "label": "PERSON" },
+      { "start": 79, "end": 90, "label": "MONEY" },
+      { "start": 103, "end": 104, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "If either party suffers a force majeure event such as flood or earthquake, obligations will be suspended for up to 180 days.",
+    "entities": [
+      { "start": 25, "end": 38, "label": "FORCE_MAJEURE" },
+      { "start": 100, "end": 103, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "The lender, Horizon Capital, requires the borrower to maintain a debt-to-equity ratio not exceeding 1.8 at all times.",
+    "entities": [
+      { "start": 12, "end": 27, "label": "ORG" },
+      { "start": 56, "end": 69, "label": "FINANCIAL_COVENANT" },
+      { "start": 83, "end": 86, "label": "RATIO" }
+    ]
+  },
+  {
+    "text": "The client, Robert Lewis, is expected to maintain liquidity ratio of 1.3 during the loan period. Failure to do so will result in a covenant breach.",
+    "entities": [
+      { "start": 12, "end": 24, "label": "PERSON" },
+      { "start": 64, "end": 67, "label": "RATIO" },
+      { "start": 117, "end": 133, "label": "LEGAL_EVENT" }
+    ]
+  },
+  {
+    "text": "A termination fee of USD 250,000 applies if the borrower prepays before the maturity date of 31st December 2030.",
+    "entities": [
+      { "start": 17, "end": 28, "label": "MONEY" },
+      { "start": 112, "end": 127, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "If the value of the collateral falls by more than 20%, the lender may call for a maintenance margin within 30 days.",
+    "entities": [
+      { "start": 39, "end": 41, "label": "PERCENT" },
+      { "start": 113, "end": 115, "label": "DURATION" }
+    ]
+  },
+  {
+    "text": "The servicing fee of USD 75,000 shall be paid at the end of each quarter by the client company, Phoenix LLC.",
+    "entities": [
+      { "start": 19, "end": 30, "label": "MONEY" },
+      { "start": 100, "end": 110, "label": "ORG" }
+    ]
+  },
+  {
+    "text": "If either party is declared insolvent, the remaining principal plus accrued interest becomes due immediately.",
+    "entities": [
+      { "start": 19, "end": 29, "label": "LEGAL_EVENT" },
+      { "start": 74, "end": 87, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "A standby fee of EUR 10,000 is payable annually by the applicant, Mr. Henry Adams, until drawdown.",
+    "entities": [
+      { "start": 16, "end": 27, "label": "MONEY" },
+      { "start": 74, "end": 86, "label": "PERSON" }
+    ]
+  },
+  {
+    "text": "The lender may require audited annual accounts from the borrower, Samantha White, as a covenant.",
+    "entities": [
+      { "start": 56, "end": 70, "label": "PERSON" },
+      { "start": 32, "end": 44, "label": "LEGAL_TERM" }
+    ]
+  },
+  {
+    "text": "Upon maturity on 31st December 2028, the borrower will repay all outstanding principal and any interest due.",
+    "entities": [{ "start": 16, "end": 31, "label": "DATE" }]
+  },
+  {
+    "text": "If the borrower refinances the loan before the 5‑year mark, a breakage fee of GBP 80,000 will apply.",
+    "entities": [
+      { "start": 107, "end": 109, "label": "DURATION" },
+      { "start": 133, "end": 144, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "The contract shall be governed by the laws of Australia and any dispute shall be settled in New South Wales.",
+    "entities": [
+      { "start": 40, "end": 49, "label": "GPE" },
+      { "start": 90, "end": 105, "label": "GPE" }
+    ]
+  },
+  {
+    "text": "A pledge agreement was signed between North Star Capital and Emma Watson on 1st November 2025 to secure USD 300,000 of the loan.",
+    "entities": [
+      { "start": 29, "end": 49, "label": "ORG" },
+      { "start": 54, "end": 65, "label": "PERSON" },
+      { "start": 69, "end": 86, "label": "DATE" },
+      { "start": 96, "end": 107, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "The lender may increase the interest to 10% per annum on the event of a downgrade in the borrower’s credit rating.",
+    "entities": [{ "start": 24, "end": 26, "label": "INTEREST_RATE" }]
+  },
+  {
+    "text": "If the borrower elects to pay interest only for the first year, no amortization of principal is required.",
+    "entities": [{ "start": 34, "end": 38, "label": "DURATION" }]
+  },
+  {
+    "text": "The underwriting bank, Blue Ridge Finance, will receive a structuring fee of EUR 250,000 upon closing of the transaction.",
+    "entities": [
+      { "start": 23, "end": 42, "label": "ORG" },
+      { "start": 76, "end": 87, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If the loan-to-value (LTV) ratio exceeds 80%, the lender may request additional security.",
+    "entities": [
+      { "start": 11, "end": 20, "label": "FINANCIAL_COVENANT" },
+      { "start": 32, "end": 35, "label": "PERCENT" }
+    ]
+  },
+  {
+    "text": "All refinancing proposals must be submitted at least 90 days before the maturity date of 31st March 2029.",
+    "entities": [
+      { "start": 71, "end": 74, "label": "DURATION" },
+      { "start": 111, "end": 126, "label": "DATE" }
+    ]
+  },
+  {
+    "text": "A default event triggered by non-payment may result in cross-default if other obligations of the borrower are outstanding.",
+    "entities": [
+      { "start": 2, "end": 15, "label": "LEGAL_EVENT" },
+      { "start": 46, "end": 57, "label": "LEGAL_EVENT" }
+    ]
+  },
+  {
+    "text": "If there is a change in law that adversely affects the lender, the borrower may renegotiate pricing or terminate the agreement with 120 days’ notice.",
+    "entities": [{ "start": 111, "end": 114, "label": "DURATION" }]
+  },
+  {
+    "text": "The agent, Global Transaction Services, shall be paid an agency fee of USD 40,000 per quarter.",
+    "entities": [
+      { "start": 16, "end": 42, "label": "ORG" },
+      { "start": 84, "end": 94, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "Upon occurrence of a material adverse change, the lender may demand immediate repayment of all amounts outstanding.",
+    "entities": [
+      { "start": 40, "end": 63, "label": "LEGAL_EVENT" },
+      { "start": 84, "end": 114, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "The employee, Sarah Connor, will receive stock options valued at GBP 500,000 if the company meets earnings targets.",
+    "entities": [
+      { "start": 13, "end": 25, "label": "PERSON" },
+      { "start": 53, "end": 64, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "If bullet repayment is chosen, the full principal of EUR 2,000,000 is to be paid on maturity date 30th June 2031.",
+    "entities": [
+      { "start": 83, "end": 99, "label": "DATE" },
+      { "start": 38, "end": 49, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "The company, Green Energy Ltd, must report quarterly revenues exceeding USD 1,000,000 to the board of lenders.",
+    "entities": [
+      { "start": 12, "end": 27, "label": "ORG" },
+      { "start": 72, "end": 83, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "In the event of a takeover, the outstanding balance must be repaid within 180 days of control change.",
+    "entities": [{ "start": 87, "end": 90, "label": "DURATION" }]
+  },
+  {
+    "text": "If the borrower breaches the covenants, the interest rate resets to 12% per annum and a default fee of USD 25,000 may apply.",
+    "entities": [
+      { "start": 45, "end": 47, "label": "INTEREST_RATE" },
+      { "start": 95, "end": 106, "label": "MONEY" }
+    ]
+  },
+  {
+    "text": "A break‑fee of EUR 20,000 will be payable in case of early termination initiated by the borrower.",
+    "entities": [
+      { "start": 12, "end": 24, "label": "MONEY" },
+      { "start": 85, "end": 96, "label": "TERMINATION" }
+    ]
+  },
+  {
+    "text": "The lender, Titan Capital, may enforce cross‑default if the borrower fails to pay under any other loan facility.",
+    "entities": [
+      { "start": 12, "end": 23, "label": "ORG" },
+      { "start": 47, "end": 59, "label": "LEGAL_EVENT" }
+    ]
+  },
+  {
+    "text": "All interest payments shall be made in USD through wire transfers to the bank account specified by the lender.",
+    "entities": [
+      { "start": 5, "end": 19, "label": "INTEREST_PAYMENT" },
+      { "start": 30, "end": 33, "label": "CURRENCY" }
+    ]
+  }
+]
