@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, FileText, CheckCircle2, AlertCircle, Download, Tag } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import InteractiveClauseViewer from './InteractiveClauseViewer';
 
 export default function ClauseExtraction({ data }) {
   // Process API data
@@ -11,14 +12,22 @@ export default function ClauseExtraction({ data }) {
     if (!data || (!data.clauses && !data.results && !data.langextract)) {
       return {
         clauses: [],
-        totalClauses: 0
+        totalClauses: 0,
+        text: ""
       };
     }
 
     let clauses = [];
+    let fullText = data.text || ""; // Try to get text from root
 
     // Handle backend format: results -> model_name -> extractions
     if (data.results) {
+      // Try getting text from nested structure if not at root
+      const firstResult = Object.values(data.results)[0];
+      if (!fullText && firstResult?.json_output?.text) {
+        fullText = firstResult.json_output.text;
+      }
+
       Object.values(data.results).forEach(modelResult => {
         if (modelResult.extractions && Array.isArray(modelResult.extractions)) {
           clauses = [...clauses, ...modelResult.extractions];
@@ -29,6 +38,9 @@ export default function ClauseExtraction({ data }) {
     } else if (data.langextract && data.langextract.clauses) {
       clauses = data.langextract.clauses;
     }
+
+    // Fallback: if we still don't have text but have clauses, we might be in a legacy state. 
+    // Ideally backend should provide text. If not, the viewer will show "No text content".
 
     // Map to standardized format with type-based importance
     clauses = clauses.map(ext => {
@@ -66,7 +78,8 @@ export default function ClauseExtraction({ data }) {
 
     return {
       clauses: clauses,
-      totalClauses: clauses.length
+      totalClauses: clauses.length,
+      text: fullText
     };
   }, [data]);
 
@@ -89,12 +102,6 @@ export default function ClauseExtraction({ data }) {
     link.click();
     document.body.removeChild(link);
   };
-
-  // Determine the correct visualization URL
-  // Check root, then langextract, then results
-  const visualizationUrl = data.highlighted_html_url ||
-    (data.langextract && data.langextract.highlighted_html_url) ||
-    (data.results && data.results['gemini-1.5-flash'] && data.results['gemini-1.5-flash'].json_output && data.results['gemini-1.5-flash'].json_output.highlighted_html_url);
 
   return (
     <div className="space-y-8">
@@ -151,80 +158,33 @@ export default function ClauseExtraction({ data }) {
         </div>
       </motion.div>
 
-      {/* Document Analysis Preview */}
-      {visualizationUrl && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-8"
-        >
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-horizon-primary" />
-            Document Analysis Preview
-          </h3>
-          <div className="w-full h-[500px] rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-white">
-            <iframe
-              src={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001'}${visualizationUrl}`}
-              title="Clause Analysis Visualization"
-              className="w-full h-full"
-              style={{ border: 'none' }}
-            />
-          </div>
-        </motion.div>
-      )}
-
-      {/* Clauses List */}
+      {/* Interactive Visualization */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-8"
+        className=""
       >
         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
           <FileText className="w-5 h-5 text-horizon-primary" />
-          Extracted Clauses
+          Analysis Visualization
         </h3>
-        <div className="space-y-4">
+
+        <InteractiveClauseViewer text={processedData.text} clauses={processedData.clauses} />
+
+      </motion.div>
+
+      {/* Detailed List (Optional fallback or extra view) */}
+      <div className="mt-8">
+        <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 opacity-80">All Extractions Table</h4>
+        <div className="space-y-2 opacity-70 hover:opacity-100 transition-opacity">
           {processedData.clauses.map((clause, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className={cn("p-5 rounded-xl border transition-all hover:shadow-md", getImportanceColor(clause.importance))}
-            >
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-3">
-                <div className="flex items-center gap-2">
-                  <Tag className="w-4 h-4 opacity-70" />
-                  <h4 className="font-bold text-lg">{clause.type}</h4>
-                </div>
-                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/50 dark:bg-black/20 backdrop-blur-sm self-start">
-                  {clause.importance} Priority
-                </span>
-              </div>
-
-              <div className="bg-white/60 dark:bg-black/20 p-4 rounded-lg mb-3">
-                <p className="text-sm leading-relaxed font-mono text-gray-800 dark:text-gray-200">
-                  "{clause.text}"
-                </p>
-              </div>
-
-              {/* Attributes Display */}
-              {clause.attributes && Object.keys(clause.attributes).length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-sm">
-                  {Object.entries(clause.attributes).map(([key, value]) => (
-                    key !== 'confidence' && (
-                      <div key={key} className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                        <span className="font-semibold capitalize opacity-75">{key.replace(/_/g, ' ')}:</span>
-                        <span>{String(value)}</span>
-                      </div>
-                    )
-                  ))}
-                </div>
-              )}
-            </motion.div>
+            <div key={idx} className="flex gap-4 text-sm border-b border-gray-100 dark:border-gray-800 py-2">
+              <span className="font-semibold w-1/3 truncate text-horizon-primary">{clause.type}</span>
+              <span className="w-2/3 truncate text-gray-600 dark:text-gray-400">{clause.text}</span>
+            </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {processedData.totalClauses === 0 && (
         <motion.div

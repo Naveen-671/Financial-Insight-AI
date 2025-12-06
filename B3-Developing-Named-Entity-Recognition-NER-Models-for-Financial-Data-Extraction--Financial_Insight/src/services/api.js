@@ -21,6 +21,7 @@ export async function processDocument(file, options = {}) {
   if (options.finbertModelName) formData.append('finbert_model_name', options.finbertModelName);
   if (options.langextractModels) formData.append('langextract_models', options.langextractModels);
   if (options.langextractApiKey) formData.append('langextract_api_key', options.langextractApiKey);
+  if (options.clausePrompt) formData.append('clauses_prompt', options.clausePrompt);
 
   const response = await fetch(`${API_BASE_URL}/api/v1/pipeline/process-document`, {
     method: 'POST',

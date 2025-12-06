@@ -287,9 +287,10 @@ If absolutely no relevant clauses are found, respond with "NONE"."""
         return f"/outputs/{filename}"
 
     def extract_clauses(self, text: str, models: Optional[List[str]] = None,
-                    api_key: Optional[str] = None, document_id: Optional[str] = None) -> Dict[str, Any]:
+                    api_key: Optional[str] = None, document_id: Optional[str] = None,
+                    user_instruction: Optional[str] = None) -> Dict[str, Any]:
         """
-        Extract financial and legal clauses from text using Gemini API.
+        Extract financial and legal clauses from text using Groq API.
         Returns JSON in the specific format requested.
         """
         if api_key:
@@ -298,7 +299,7 @@ If absolutely no relevant clauses are found, respond with "NONE"."""
         if not self.api_key:
             return {
                 "success": False,
-                "error": "Google API key not configured",
+                "error": "Groq API key not configured",
                 "results": {},
                 "metadata": {}
             }
@@ -308,7 +309,7 @@ If absolutely no relevant clauses are found, respond with "NONE"."""
             document_id = f"doc_{uuid.uuid4().hex[:8]}"
 
         # Construct prompt for structured JSON output
-        prompt = f"""Analyze the following financial/legal document and extract key clauses.
+        system_instruction = f"""Analyze the following financial/legal document and extract key clauses.
         
         Output the result strictly as a valid JSON object with the following structure:
         {{
@@ -328,18 +329,39 @@ If absolutely no relevant clauses are found, respond with "NONE"."""
             "text": "original text (truncated if too long)",
             "document_id": "{document_id}"
         }}
+        """
 
-        Clause Types to look for:
-        - Payment Clause (payment_due, late_fee, condition)
-        - Interest Clause (interest_rate, calculation_period, condition)
-        - Termination Clause (notice_period, triggering_party, condition)
-        - Confidentiality Clause
-        - Liability Clause
-        - Governing Law Clause
+        if user_instruction and user_instruction.strip():
+            # Use user provided instructions
+            logging_info = f"Using custom user instructions: {user_instruction[:50]}..."
+            specific_instruction = f"""
+            User Instructions & Custom Clauses:
+            {user_instruction}
+            
+            Strictly follow the JSON structure defined above. Map the user's requested extractions to the 'extraction_class' field.
+            """
+        else:
+            # Default instructions
+            logging_info = "Using default clause types."
+            specific_instruction = """
+            Clause Types to look for:
+            - Payment Clause (payment_due, late_fee, condition)
+            - Interest Clause (interest_rate, calculation_period, condition)
+            - Termination Clause (notice_period, triggering_party, condition)
+            - Confidentiality Clause
+            - Liability Clause
+            - Governing Law Clause
+            """
+
+        prompt = f"""{system_instruction}
+
+        {specific_instruction}
 
         Text to analyze:
         {text[:10000]}
         """
+        
+        print(logging_info)
 
         try:
             response_text = self._call_groq_api(prompt)
@@ -384,13 +406,14 @@ If absolutely no relevant clauses are found, respond with "NONE"."""
             return {
                 "success": True,
                 "results": {
-                    "gemini-1.5-flash": {
+                    "llama-3.1-8b-instant": {
                         "success": True,
                         "extractions": data.get("extractions", []),
                         "json_output": data
                     }
                 },
                 "clauses": data.get("extractions", []), # For backward compatibility with frontend
+                "text": text,
                 "highlighted_html_url": highlighted_html_url,
                 "metadata": {
                     "text_length": len(text),

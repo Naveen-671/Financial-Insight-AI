@@ -31,6 +31,7 @@ const UploadPage = ({ setAnalysisResults }) => {
     sentiment: true,
     clauses: false
   });
+  const [clausePrompt, setClausePrompt] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -135,7 +136,10 @@ const UploadPage = ({ setAnalysisResults }) => {
 
       // Process the first file (for now, handle only the first file)
       const file = selectedFiles[0].file;
-      const result = await processDocument(file, selectedFeatures);
+      const result = await processDocument(file, {
+        ...selectedFeatures,
+        clausePrompt: selectedFeatures.clauses ? clausePrompt : null
+      });
 
       if (result.success) {
         // Update global state if available
@@ -175,6 +179,7 @@ const UploadPage = ({ setAnalysisResults }) => {
     setUploadProgress(0);
     setStep(1);
     setSelectedFeatures({ ner: true, sentiment: true, clauses: false });
+    setClausePrompt("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -392,7 +397,7 @@ const UploadPage = ({ setAnalysisResults }) => {
                   Choose which AI-powered analyses you want to run on your documents
                 </p>
 
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-3 gap-4 mb-8">
                   {features.map((feature, idx) => (
                     <motion.button
                       key={feature.id}
@@ -439,6 +444,39 @@ const UploadPage = ({ setAnalysisResults }) => {
                     </motion.button>
                   ))}
                 </div>
+
+                {/* Custom Clause Prompt Input */}
+                <AnimatePresence>
+                  {selectedFeatures.clauses && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="bg-gray-50 dark:bg-horizon-secondary/30 rounded-xl p-6 border border-gray-200 dark:border-white/10"
+                    >
+                      <div className="flex items-start gap-4">
+                        <Shield className="w-6 h-6 text-horizon-primary mt-1" />
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                            Custom Clause Extraction (Optional)
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            Provide few-shot examples or specific instructions for extracting custom clauses.
+                            <br />
+                            <span className="text-xs opacity-70">Example: "Extract 'Unusual Liability' clauses that discuss unlimited indemnification."</span>
+                          </p>
+                          <textarea
+                            value={clausePrompt}
+                            onChange={(e) => setClausePrompt(e.target.value)}
+                            placeholder="Enter instructions or example excerpts here..."
+                            className="w-full h-32 p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-horizon-primary focus:border-transparent outline-none transition-all resize-y text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
 
                 {!Object.values(selectedFeatures).some(v => v) && (
                   <motion.div
@@ -543,6 +581,15 @@ const UploadPage = ({ setAnalysisResults }) => {
                       )
                     ))}
                   </div>
+                  {/* Prompt Summary */}
+                  {selectedFeatures.clauses && clausePrompt && (
+                    <div className="mt-4 p-4 bg-gray-50 dark:bg-horizon-secondary/20 rounded-lg border border-gray-200 dark:border-white/10">
+                      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Custom Instructions:</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 italic line-clamp-3">
+                        "{clausePrompt}"
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Progress Bar */}

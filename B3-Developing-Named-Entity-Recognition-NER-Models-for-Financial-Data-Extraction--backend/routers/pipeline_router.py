@@ -31,6 +31,7 @@ class PipelineOptions(BaseModel):
     ner_model_path: Optional[str] = None
     langextract_models: Optional[List[str]] = None
     langextract_api_key: Optional[str] = None
+    clauses_prompt: Optional[str] = None
     finbert_model_name: Optional[str] = None
 
 
@@ -83,6 +84,7 @@ async def process_document_pipeline(
     ner_model_path: Optional[str] = Form(None),
     langextract_models: Optional[str] = Form(None),
     langextract_api_key: Optional[str] = Form(None),
+    clauses_prompt: Optional[str] = Form(None),
     finbert_model_name: Optional[str] = Form(None),
 ):
     """
@@ -189,7 +191,8 @@ async def process_document_pipeline(
                     text=extracted_text,
                     models=parsed_langextract_models,
                     api_key=langextract_api_key,
-                    document_id=document_id
+                    document_id=document_id,
+                    user_instruction=clauses_prompt
                 )
                 pipeline_result["langextract"] = langextract_result
                 pipeline_result["pipeline_steps"].append("langextract")
@@ -284,6 +287,7 @@ async def process_text_pipeline(request: TextPipelineRequest):
                     text=request.text,
                     models=request.options.langextract_models,
                     api_key=request.options.langextract_api_key,
+                    user_instruction=request.options.clauses_prompt
                 )
                 pipeline_result["langextract"] = langextract_result
                 pipeline_result["pipeline_steps"].append("langextract")
