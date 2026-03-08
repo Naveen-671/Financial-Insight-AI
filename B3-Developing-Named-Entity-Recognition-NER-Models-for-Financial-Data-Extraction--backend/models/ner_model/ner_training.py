@@ -39,10 +39,11 @@ def train_ner_model(annotation_path, output_dir):
     print(f"Training file saved at: {training_file}")
 
     print("Initializing spaCy config...")
-    os.system("python -m spacy init config config.cfg --lang en --pipeline ner --optimize efficiency --force")
+    config_file = os.path.join(output_dir, "config.cfg")
+    os.system(f"python -m spacy init config {config_file} --lang en --pipeline ner --optimize efficiency --force")
 
     print("Training model...")
-    os.system(f"python -m spacy train config.cfg --output {output_dir} --paths.train {training_file} --paths.dev {training_file}")
+    os.system(f"python -m spacy train {config_file} --output {output_dir} --paths.train {training_file} --paths.dev {training_file}")
 
     print("Loading trained model...")
     nlp_model = spacy.load(os.path.join(output_dir, "model-best"))
@@ -55,13 +56,13 @@ def train_ner_model(annotation_path, output_dir):
     from spacy import displacy
     html = displacy.render(doc, style="ent", page=True)
 
-    with open("./models/entities.html", "w", encoding="utf-8") as f:
+    with open(os.path.join(output_dir, "entities.html"), "w", encoding="utf-8") as f:
         f.write(html)
 
     print("NER training completed!")
     return "Training complete"
 
 if __name__ == "__main__":
-    annotation_path = "./models/annotations.json"  # your JSON file path
-    output_dir = "./models/"  # output directory for trained model
+    annotation_path = "./models/ner_model/annotations.json"  # Corrected path
+    output_dir = "./models/ner_model/"  # Corrected output directory
     train_ner_model(annotation_path, output_dir)

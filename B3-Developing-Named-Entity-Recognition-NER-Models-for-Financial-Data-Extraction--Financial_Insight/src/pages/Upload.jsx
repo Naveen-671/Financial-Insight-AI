@@ -33,6 +33,7 @@ const UploadPage = ({ setAnalysisResults }) => {
   });
   const [clausePrompt, setClausePrompt] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [nerKind, setNerKind] = useState('custom'); // 'custom' or 'standard'
   const fileInputRef = useRef(null);
 
   const features = [
@@ -138,7 +139,8 @@ const UploadPage = ({ setAnalysisResults }) => {
       const file = selectedFiles[0].file;
       const result = await processDocument(file, {
         ...selectedFeatures,
-        clausePrompt: selectedFeatures.clauses ? clausePrompt : null
+        clausePrompt: selectedFeatures.clauses ? clausePrompt : null,
+        nerModelPath: selectedFeatures.ner ? (nerKind === 'custom' ? "models/ner_model/model-best" : "en_core_web_sm") : null
       });
 
       if (result.success) {
@@ -179,6 +181,7 @@ const UploadPage = ({ setAnalysisResults }) => {
     setUploadProgress(0);
     setStep(1);
     setSelectedFeatures({ ner: true, sentiment: true, clauses: false });
+    setNerKind('custom');
     setClausePrompt("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -444,6 +447,77 @@ const UploadPage = ({ setAnalysisResults }) => {
                     </motion.button>
                   ))}
                 </div>
+
+
+                {/* Custom NER Model Selection */}
+                <AnimatePresence>
+                  {selectedFeatures.ner && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="bg-gray-50 dark:bg-horizon-secondary/30 rounded-xl p-6 border border-gray-200 dark:border-white/10 mb-4"
+                    >
+                      <div className="flex items-start gap-4">
+                        <Brain className="w-6 h-6 text-horizon-primary mt-1" />
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                            NER Model Selection
+                          </h3>
+                          <div className="flex flex-wrap gap-4">
+                            <button
+                              onClick={() => setNerKind('custom')}
+                              className={cn(
+                                "flex-1 min-w-[200px] p-4 rounded-xl border-2 transition-all text-left group",
+                                nerKind === 'custom'
+                                  ? "border-horizon-primary bg-horizon-primary/5 dark:bg-horizon-primary/10"
+                                  : "border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 bg-white dark:bg-gray-800"
+                              )}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <span className={cn(
+                                  "font-semibold",
+                                  nerKind === 'custom' ? "text-horizon-primary" : "text-gray-900 dark:text-white"
+                                )}>Custom Trained Model</span>
+                                {nerKind === 'custom' && <CheckCircle className="w-5 h-5 text-horizon-primary" />}
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Specialized for financial entities (trained on your data).
+                              </p>
+                              <div className="mt-2 text-xs font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded inline-block text-gray-500">
+                                models/ner_model/model-best
+                              </div>
+                            </button>
+
+                            <button
+                              onClick={() => setNerKind('standard')}
+                              className={cn(
+                                "flex-1 min-w-[200px] p-4 rounded-xl border-2 transition-all text-left group",
+                                nerKind === 'standard'
+                                  ? "border-horizon-primary bg-horizon-primary/5 dark:bg-horizon-primary/10"
+                                  : "border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 bg-white dark:bg-gray-800"
+                              )}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <span className={cn(
+                                  "font-semibold",
+                                  nerKind === 'standard' ? "text-horizon-primary" : "text-gray-900 dark:text-white"
+                                )}>Standard Model</span>
+                                {nerKind === 'standard' && <CheckCircle className="w-5 h-5 text-horizon-primary" />}
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                General purpose English model (en_core_web_sm).
+                              </p>
+                              <div className="mt-2 text-xs font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded inline-block text-gray-500">
+                                en_core_web_sm
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Custom Clause Prompt Input */}
                 <AnimatePresence>
