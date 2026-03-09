@@ -17,18 +17,13 @@ import time
 
 # Pinecone import
 try:
-    from pinecone.grpc import PineconeGRPC as Pinecone
-    from pinecone import ServerlessSpec
+    from pinecone import Pinecone, ServerlessSpec
     HAS_PINECONE = True
 except ImportError:
-    try:
-        from pinecone import Pinecone, ServerlessSpec
-        HAS_PINECONE = True
-    except ImportError:
-        HAS_PINECONE = False
-        Pinecone = None
-        ServerlessSpec = None
-        print("Warning: Pinecone not installed. Using in-memory storage only.")
+    HAS_PINECONE = False
+    Pinecone = None
+    ServerlessSpec = None
+    print("Warning: Pinecone not installed. Using in-memory storage only.")
 
 # Groq import
 try:

@@ -45,3 +45,6 @@ numpy>=1.24.0
 
 # Type extensions
 typing-extensions>=4.8.0
+
+# Protobuf (needed by Pinecone and Google AI)
+protobuf>=5.29.0
