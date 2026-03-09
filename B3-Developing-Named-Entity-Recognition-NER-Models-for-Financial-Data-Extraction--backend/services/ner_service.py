@@ -15,7 +15,7 @@ class NERService:
         self.model_loaded = False
         self.hf_api_key = os.getenv("HUGGINGFACE_API_KEY", "")
         self.hf_model = "dslim/bert-base-NER"  # Popular NER model on HuggingFace
-        self.api_url = f"https://api-inference.huggingface.co/models/{self.hf_model}"
+        self.api_url = f"https://router.huggingface.co/hf-inference/models/{self.hf_model}"
         Config.create_directories()
         
         if self.hf_api_key:

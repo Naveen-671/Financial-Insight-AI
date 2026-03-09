@@ -171,49 +171,34 @@ class RAGService:
             return f"Error generating content: {str(e)}"
 
     def _get_embedding(self, text: str) -> Optional[List[float]]:
-        """Get embedding for text using Gemini Embedding API with retry logic."""
+        """Get embedding for text using Google Generative AI SDK with retry logic."""
         if not self.api_key:
             return None
-            
-        url = "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent"
-        headers = {
-            "x-goog-api-key": self.api_key,
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "model": "models/text-embedding-004",
-            "content": {"parts": [{"text": text}]}
-        }
         
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                response = requests.post(url, headers=headers, json=payload, timeout=30)
+                import google.generativeai as genai
+                genai.configure(api_key=self.api_key)
                 
-                if response.status_code == 429:
-                    wait_time = 2 ** attempt
-                    print(f"Embedding rate limit hit (429). Retrying in {wait_time}s...")
-                    time.sleep(wait_time)
-                    continue
-                
-                if response.status_code != 200:
-                    print(f"Embedding API error: HTTP {response.status_code}")
-                    if attempt == max_retries - 1:
-                        return None
-                    time.sleep(1)
-                    continue
-                    
-                result = response.json()
-                return result["embedding"]["values"]
+                result = genai.embed_content(
+                    model="models/text-embedding-004",
+                    content=text,
+                    task_type="retrieval_query"
+                )
+                return result["embedding"]
             except Exception as e:
                 # Sanitize error message to avoid leaking API keys
                 error_msg = str(e)
                 if self.api_key and self.api_key in error_msg:
                     error_msg = error_msg.replace(self.api_key, "***REDACTED***")
+                
                 if attempt == max_retries - 1:
                     print(f"Error getting embedding after retries: {error_msg}")
                     return None
-                time.sleep(1)
+                    
+                wait_time = 2 ** attempt
+                time.sleep(wait_time)
                 
         return None
 
