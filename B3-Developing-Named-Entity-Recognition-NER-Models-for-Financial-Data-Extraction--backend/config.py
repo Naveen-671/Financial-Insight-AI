@@ -11,24 +11,20 @@ class Config:
     
     UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
-    # Model paths
-    NER_MODEL_NAME = "en_core_web_sm"  # Default spaCy model to use
-    NER_MODEL_PATH = MODELS_DIR / "ner_model" / "model-best"  # Custom model path (if available)
     
-    # Ensure the model path exists
-    if not NER_MODEL_PATH.exists():
-        print(f"Warning: NER model not found at {NER_MODEL_PATH}")
-        # Try to create the directory structure if it doesn't exist
-        NER_MODEL_PATH.mkdir(parents=True, exist_ok=True)
+    # Model settings (API-based, no local models)
+    NER_MODEL_NAME = "dslim/bert-base-NER"  # HuggingFace model for NER
+    NER_MODEL_PATH = MODELS_DIR / "ner_model" / "model-best"  # Legacy path (unused in API mode)
     
     # API Keys (set from environment)
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
     
     # LangExtract settings
     LANGEXTRACT_MODELS = ["gemini-2.5-flash","gemini-2.5-flash-lite", "gemini-2.5-pro"]
     
-    # FinBERT settings
+    # FinBERT settings (API-based)
     FINBERT_MODEL = "ProsusAI/finbert"
     
     # File size limits
@@ -58,9 +54,12 @@ class Config:
         
         if not cls.GOOGLE_API_KEY:
             issues.append("GOOGLE_API_KEY not set")
+        
+        if not cls.HUGGINGFACE_API_KEY:
+            issues.append("HUGGINGFACE_API_KEY not set (NER and FinBERT will use fallback)")
             
-        if not cls.NER_MODEL_PATH.exists():
-            issues.append(f"NER model not found at {cls.NER_MODEL_PATH}")
+        if not cls.GROQ_API_KEY:
+            issues.append("GROQ_API_KEY not set (RAG and LangExtract will not work)")
             
         return {
             "valid": len(issues) == 0,

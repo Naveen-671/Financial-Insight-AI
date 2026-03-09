@@ -40,13 +40,12 @@ class TextPipelineRequest(BaseModel):
     options: PipelineOptions = PipelineOptions()
 
 
-@router.get("/pipeline-status")
-async def get_pipeline_status():
+@router.get("/pipeline-status-summary")
+async def get_pipeline_status_summary():
     return {
         "ner": {
             "available": ner_service.is_model_available(),
-            "model_path": str(Config.NER_MODEL_PATH),
-            "model_exists": Config.NER_MODEL_PATH.exists()
+            "inference_method": "huggingface_api" if getattr(ner_service, 'hf_api_key', None) else "regex_fallback"
         }
     }
 
@@ -341,18 +340,18 @@ async def get_pipeline_status():
             },
             "ner": {
                 "available": ner_service.is_model_available(),
-                "model_path": str(Config.NER_MODEL_PATH),
-                "model_exists": Config.NER_MODEL_PATH.exists(),
+                "inference_method": "huggingface_api" if getattr(ner_service, 'hf_api_key', None) else "regex_fallback",
+                "model": getattr(ner_service, 'hf_model', Config.NER_MODEL_NAME),
             },
             "langextract": {
                 "available": langextract_service.is_available(),
-                "api_key_configured": bool(Config.GOOGLE_API_KEY),
+                "api_key_configured": bool(Config.GROQ_API_KEY),
                 "supported_models": Config.LANGEXTRACT_MODELS,
             },
             "finbert": {
                 "available": finbert_service.is_model_available(),
                 "model_name": Config.FINBERT_MODEL,
-                "api_key_required": False,
+                "inference_method": "huggingface_api",
             },
             "overall_status": {
                 "ready_for_document_processing": True,

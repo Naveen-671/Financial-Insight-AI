@@ -2,36 +2,29 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-multipart==0.0.6
-python-magic==0.4.27
 
-# Document processing
-docling>=1.0.0
+# Document processing (lightweight)
 PyPDF2>=3.0.0
 pypdf>=3.17.0
 python-pptx>=0.6.21
 python-docx>=1.0.1
 
-# NLP and ML
-spacy>=3.7.0
-transformers>=4.36.0
-torch>=2.1.0
+# NLP (lightweight only - heavy models use HuggingFace Inference API)
 nltk>=3.8.1
-sentence-transformers>=2.2.2
 
 # LangChain and RAG
 langchain>=0.1.0
 langchain-community>=0.0.13
-langchain-google-genai>=0.0.7
 langchain-text-splitters>=0.0.1
 
 # Vector Database
 pinecone-client>=3.0.0
 
-# LangExtract
-langextract>=0.1.0
-
-# Google Generative AI
+# Google Generative AI (for embeddings)
 google-generativeai>=0.3.0
+
+# Groq (for LLM generation)
+groq>=0.4.0
 
 # HTML and text processing
 beautifulsoup4>=4.12.0
@@ -48,18 +41,7 @@ pydantic>=2.5.0
 tqdm>=4.66.0
 pydantic-settings>=2.0.3
 python-dateutil>=2.8.2
+numpy>=1.24.0
 
-# Optional: For development
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.1.0
-black>=23.11.0
-isort>=5.12.0
-mypy>=1.7.0
-
-# System monitoring (optional)
-psutil>=5.9.0
-
-# Type stubs for better IDE support
-types-requests>=2.31.0.1
+# Type extensions
 typing-extensions>=4.8.0

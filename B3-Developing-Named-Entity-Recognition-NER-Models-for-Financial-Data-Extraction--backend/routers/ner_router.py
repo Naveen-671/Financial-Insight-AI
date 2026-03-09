@@ -54,15 +54,14 @@ async def get_model_status():
     """
     try:
         is_available = ner_service.is_model_available()
-        model_exists = Config.NER_MODEL_PATH.exists()
         
         return {
             "model_loaded": is_available,
-            "model_path_exists": model_exists,
-            "model_path": str(Config.NER_MODEL_PATH),
+            "inference_method": "huggingface_api" if ner_service.hf_api_key else "regex_fallback",
+            "hf_model": ner_service.hf_model,
+            "api_key_configured": bool(ner_service.hf_api_key),
             "recommendations": [
-                "Upload model to models/ner_model/model-best" if not model_exists else None,
-                "Load model using /load-model endpoint" if model_exists and not is_available else None
+                "Set HUGGINGFACE_API_KEY for better NER accuracy" if not ner_service.hf_api_key else None
             ]
         }
         
@@ -94,32 +93,13 @@ async def load_ner_model(model_path: Optional[str] = None):
 @router.post("/train-model")
 async def train_ner_model(request: TrainRequest):
     """
-    Train NER model from annotations file
-    
-    This endpoint creates and trains a new spaCy NER model
+    Train NER model from annotations file.
+    Note: Training is not available in API-based deployment mode.
     """
-    try:
-        import os
-        
-        # Validate annotations file exists
-        if not os.path.exists(request.annotations_file):
-            raise HTTPException(status_code=404, detail=f"Annotations file not found: {request.annotations_file}")
-        
-        # Train model
-        result = ner_service.train_model_from_annotations(
-            request.annotations_file, 
-            request.output_dir
-        )
-        
-        if not result["success"]:
-            raise HTTPException(status_code=500, detail=result["error"])
-        
-        return result
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Training error: {str(e)}")
+    return {
+        "success": False,
+        "error": "Model training is not available in API-based deployment mode. Use local development environment for training."
+    }
 
 @router.get("/entity-types")
 async def get_supported_entity_types():

@@ -1,5 +1,6 @@
 import os
 import uuid
+import requests
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 import nltk
@@ -7,24 +8,16 @@ from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
 from config import Config
 
-try:
-    import torch
-    from transformers import pipeline
-    from huggingface_hub import InferenceClient
-    TRANSFORMERS_AVAILABLE = True
-except ImportError:
-    TRANSFORMERS_AVAILABLE = False
-    print("Warning: transformers not available. Install with: pip install transformers torch")
-
 
 class FinBERTService:
+    """FinBERT Sentiment Analysis using HuggingFace Inference API."""
+    
     def __init__(self):
-        self.sentiment_pipeline = None
         self.model_loaded = False
-        if TRANSFORMERS_AVAILABLE:
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        else:
-            self.device = "cpu"
+        self.hf_api_key = os.getenv("HUGGINGFACE_API_KEY", "")
+        self.hf_model = "ProsusAI/finbert"
+        self.api_url = f"https://api-inference.huggingface.co/models/{self.hf_model}"
+        self.device = "api"
         Config.create_directories()
 
         # Download NLTK data
@@ -33,47 +26,93 @@ class FinBERTService:
             nltk.download('punkt_tab', quiet=True)
         except Exception as e:
             print(f"Warning: NLTK download failed: {e}")
+        
+        if self.hf_api_key:
+            self.model_loaded = True
+            print(f"FinBERT Service initialized with HuggingFace Inference API")
+        else:
+            print("Warning: HUGGINGFACE_API_KEY not set. Sentiment analysis will not work.")
 
     def load_model(self, model_name: Optional[str] = None) -> bool:
         """
-        Load FinBERT sentiment analysis model with improved error handling
+        Initialize FinBERT service (API-based, no local model loading needed).
 
         Args:
-            model_name: Model name to load, defaults to config
+            model_name: Ignored for API-based approach
 
         Returns:
-            True if model loaded successfully, False otherwise
+            True if API key is available, False otherwise
         """
-        try:
-            if not TRANSFORMERS_AVAILABLE:
-                raise RuntimeError("transformers library not available")
-
-            model_to_use = model_name or Config.FINBERT_MODEL
-            print(f"Loading FinBERT model: {model_to_use} on {self.device}")
-
-            # Load pipeline with device map for better memory management
-            self.sentiment_pipeline = pipeline(
-                "text-classification",
-                model=model_to_use,
-                device=0 if self.device == "cuda" else -1,  # Use GPU if available
-                truncation=True,
-                max_length=512
-            )
+        if self.hf_api_key:
             self.model_loaded = True
-            print("FinBERT model loaded successfully")
             return True
+        
+        print("Error: HUGGINGFACE_API_KEY not set")
+        return False
 
-        except Exception as e:
-            print(f"Error loading FinBERT model: {str(e)}")
-            self.model_loaded = False
-            return False
+    def _call_hf_api(self, texts: List[str]) -> List[Dict[str, Any]]:
+        """Call HuggingFace Inference API for sentiment analysis."""
+        headers = {"Authorization": f"Bearer {self.hf_api_key}"}
+        
+        results = []
+        for text in texts:
+            try:
+                # Truncate text to 512 chars to respect model limits
+                truncated_text = text[:512]
+                
+                response = requests.post(
+                    self.api_url,
+                    headers=headers,
+                    json={"inputs": truncated_text},
+                    timeout=30
+                )
+                
+                if response.status_code == 503:
+                    # Model is loading, wait and retry
+                    import time
+                    time.sleep(10)
+                    response = requests.post(
+                        self.api_url,
+                        headers=headers,
+                        json={"inputs": truncated_text},
+                        timeout=60
+                    )
+                
+                response.raise_for_status()
+                result = response.json()
+                
+                # HF API returns [[{label, score}, ...]] for classification
+                if isinstance(result, list) and len(result) > 0:
+                    if isinstance(result[0], list):
+                        # Get the top prediction
+                        top_pred = max(result[0], key=lambda x: x.get("score", 0))
+                        results.append({
+                            "label": top_pred.get("label", "neutral").lower(),
+                            "score": top_pred.get("score", 0.0)
+                        })
+                    elif isinstance(result[0], dict):
+                        top_pred = max(result, key=lambda x: x.get("score", 0))
+                        results.append({
+                            "label": top_pred.get("label", "neutral").lower(),
+                            "score": top_pred.get("score", 0.0)
+                        })
+                    else:
+                        results.append({"label": "neutral", "score": 0.0, "error": "Unexpected response format"})
+                else:
+                    results.append({"label": "neutral", "score": 0.0, "error": "Empty response"})
+                    
+            except Exception as e:
+                print(f"HuggingFace API error for text '{text[:50]}...': {e}")
+                results.append({"label": "neutral", "score": 0.0, "error": str(e)})
+        
+        return results
 
     def analyze_sentiment(self, text: str) -> Dict[str, Any]:
         """
-        Analyze sentiment of text using FinBERT with batch processing support
+        Analyze sentiment of text using FinBERT via HuggingFace API.
 
         Args:
-            text: Input text or list of texts for sentiment analysis
+            text: Input text for sentiment analysis
 
         Returns:
             Dictionary containing sentiment results
@@ -82,34 +121,21 @@ class FinBERTService:
             if not self.model_loaded and not self.load_model():
                 return {
                     "success": False,
-                    "error": "Failed to load FinBERT model",
+                    "error": "Failed to initialize FinBERT service (missing API key)",
                     "text": text
                 }
 
-            # Process text in batches if it's a list
+            # Process text
             is_batch = isinstance(text, list)
             texts = text if is_batch else [text]
 
-            # Process in chunks to avoid OOM errors
-            batch_size = 8 if self.device == "cuda" else 4
-            results = []
-
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i:i + batch_size]
-                try:
-                    batch_results = self.sentiment_pipeline(batch)
-                    results.extend(batch_results)
-                except Exception as e:
-                    print(f"Error processing batch {i//batch_size}: {str(e)}")
-                    # Add error placeholders for failed batch
-                    results.extend(
-                        [{"error": str(e), "label": "error", "score": 0.0}] * len(batch))
+            results = self._call_hf_api(texts)
 
             if is_batch:
                 return {
                     "success": True,
                     "results": [{
-                        "label": r.get("label", "neutral").lower(),
+                        "label": r.get("label", "neutral"),
                         "score": r.get("score", 0.0),
                         "text": texts[i] if i < len(texts) else ""
                     } for i, r in enumerate(results)],
@@ -119,7 +145,7 @@ class FinBERTService:
                 if results and "error" not in results[0]:
                     return {
                         "success": True,
-                        "label": results[0].get("label", "neutral").lower(),
+                        "label": results[0].get("label", "neutral"),
                         "score": results[0].get("score", 0.0),
                         "text": text,
                         "device": self.device
@@ -127,7 +153,7 @@ class FinBERTService:
                 else:
                     return {
                         "success": False,
-                        "error": results[0].get("error", "Unknown error"),
+                        "error": results[0].get("error", "Unknown error") if results else "No results",
                         "text": text
                     }
 
@@ -140,7 +166,7 @@ class FinBERTService:
 
     def analyze_document_sentiment(self, html_content: str) -> Dict[str, Any]:
         """
-        Analyze sentiment for each sentence in HTML document
+        Analyze sentiment for each sentence in HTML document.
 
         Args:
             html_content: HTML content of the document
@@ -151,7 +177,7 @@ class FinBERTService:
         try:
             if not self.model_loaded:
                 if not self.load_model():
-                    raise RuntimeError("Failed to load FinBERT model")
+                    raise RuntimeError("Failed to initialize FinBERT service")
 
             # Parse HTML
             soup = BeautifulSoup(html_content, "html.parser")
@@ -222,7 +248,8 @@ class FinBERTService:
                 "highlighted_html_file": output_filename,
                 "highlighted_html_url": f"/outputs/{output_filename}",
                 "metadata": {
-                    "model_used": Config.FINBERT_MODEL,
+                    "model_used": self.hf_model,
+                    "inference_method": "huggingface_api",
                     "sentiment_colors": Config.SENTIMENT_COLORS
                 }
             }
@@ -237,7 +264,7 @@ class FinBERTService:
             }
 
     def _calculate_sentiment_stats(self, sentence_results: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Calculate sentiment statistics from sentence results"""
+        """Calculate sentiment statistics from sentence results."""
         if not sentence_results:
             return {}
 
@@ -273,7 +300,7 @@ class FinBERTService:
 
     def analyze_text_sentiment(self, text: str) -> Dict[str, Any]:
         """
-        Analyze sentiment for plain text (sentence by sentence)
+        Analyze sentiment for plain text (sentence by sentence).
 
         Args:
             text: Plain text input
@@ -284,7 +311,7 @@ class FinBERTService:
         try:
             if not self.model_loaded:
                 if not self.load_model():
-                    raise RuntimeError("Failed to load FinBERT model")
+                    raise RuntimeError("Failed to initialize FinBERT service")
 
             # Tokenize sentences
             sentences = sent_tokenize(text)
@@ -318,7 +345,8 @@ class FinBERTService:
                 "statistics": sentiment_stats,
                 "total_sentences": len(sentences),
                 "metadata": {
-                    "model_used": Config.FINBERT_MODEL,
+                    "model_used": self.hf_model,
+                    "inference_method": "huggingface_api",
                     "text_length": len(text)
                 }
             }
@@ -333,9 +361,9 @@ class FinBERTService:
             }
 
     def is_model_available(self) -> bool:
-        """Check if FinBERT model is available and loaded"""
-        return TRANSFORMERS_AVAILABLE and self.model_loaded
+        """Check if FinBERT service is available."""
+        return bool(self.hf_api_key) and self.model_loaded
 
     def get_sentiment_colors(self) -> Dict[str, str]:
-        """Get sentiment color mapping"""
+        """Get sentiment color mapping."""
         return Config.SENTIMENT_COLORS.copy()
