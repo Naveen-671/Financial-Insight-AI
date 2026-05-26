@@ -117,7 +117,8 @@ npm run dev
 ---
 
 ## 📖 Usage Guide
-
+Demo video: https://www.linkedin.com/posts/naveen-r-dev_ai-nlp-fintech-activity-7424848426607079424-g3A0
+Try out: https://financial-insight-ai-three.vercel.app
 1.  **Upload:** Go to the "Upload" page and select a PDF, DOCX, or TXT file.
 2.  **Analyze:** The system will automatically process the document.
 3.  **View Results:**
